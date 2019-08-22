@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.urls import path
 
 # Create your models here.
 
