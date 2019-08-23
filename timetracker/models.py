@@ -21,8 +21,23 @@ class Checking(models.Model):
     check = models.CharField(max_length=3, choices=checkChoices, blank=False)
     time = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.employee.name, self.check
+
+
+class WorkingHours(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    hours = models.IntegerField()
+    date = models.DateTimeField(blank=False)
+
+    def __str__(self):
+        return self.employee.name, int(self.hours)
+
 
 class Vacation(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=False)
     description = models.TextField(default='', blank=True)
-    date = models.DateField(default=date.today())
+    date = models.DateField(blank=False)
+
+    def __str__(self):
+        return self.employee.name, self.description
