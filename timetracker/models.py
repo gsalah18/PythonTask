@@ -22,7 +22,6 @@ class Checking(models.Model):
     time = models.DateTimeField(default=timezone.now)
 
 
-
 class Vacation(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=False)
     description = models.TextField(default='', blank=True)
