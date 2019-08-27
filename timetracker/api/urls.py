@@ -11,5 +11,4 @@ urlpatterns = [
     url(r'^v1/', include(api_router.urls)),
     url(r'^v1/team-work', get_team_work_percent),
     url(r'^v1/auth', obtain_auth_token)
-
 ]
