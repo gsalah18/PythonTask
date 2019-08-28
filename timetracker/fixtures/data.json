@@ -1,0 +1,52 @@
+[
+  {
+    "model": "timetracker.employee",
+    "pk": 1,
+    "fields": {
+      "name": "Salah"
+    }
+  },
+  {
+    "model": "timetracker.employee",
+    "pk": 2,
+    "fields": {
+      "name": "Waseem"
+    }
+  },
+  {
+    "model": "timetracker.checking",
+    "pk": 1,
+    "fields": {
+      "employee": 1,
+	  "checkin": 1566984584,
+	  "checkout": 1567013384
+    }
+  },
+  {
+    "model": "timetracker.checking",
+    "pk": 2,
+    "fields": {
+      "employee": 2,
+	  "checkin": 1566984584,
+	  "checkout": 1567013384
+    }
+  },
+  {
+    "model": "timetracker.vacation",
+    "pk": 1,
+    "fields": {
+      "employee": 1,
+	  "description": "Salah Vacation",
+	  "date": "2019-8-29"
+    }
+  },
+  {
+    "model": "timetracker.vacation",
+    "pk": 2,
+    "fields": {
+      "employee": 2,
+	  "description": "Waseem Vacation",
+	  "date": "2019-8-25"
+    }
+  }
+]

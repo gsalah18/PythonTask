@@ -2,7 +2,7 @@ import json
 from datetime import timedelta
 from datetime import datetime
 
-from django.db.models import Sum, F, Avg
+from django.db.models import Sum, F, Avg, Max, Min
 from rest_framework import status
 from rest_framework.decorators import action, permission_classes
 from rest_framework.viewsets import ModelViewSet
@@ -68,6 +68,9 @@ class EmployeeViewSet(ModelViewSet):
             else:
                 return Response({'error': 'You have to check in first then check out'},
                                 status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Check va;ie is invalid'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated],
             url_path='set-vacation', url_name='set_vacation')
@@ -168,10 +171,10 @@ class EmployeeViewSet(ModelViewSet):
                     .filter(checkin__gte=week_brgin, checkin__lte=week_end,
                             checkout__gte=week_brgin, checkout__lte=week_end).annotate(
                     working_hours=Sum(F('checkout') - F('checkin')))
-        if emp_working_hours.count() == 0:
-            return Response({'error': 'There is no data in the period'}, status=status.HTTP_400_BAD_REQUEST)
         if emp_working_hours is None:
             return Response({'error': 'prod type is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+        if emp_working_hours.count() == 0:
+            return Response({'error': 'There is no data in the period'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'result': datetime.fromtimestamp(emp_working_hours[0].working_hours).hour - 2, 'error': None},
                         status=status.HTTP_200_OK)
         # The -2 is because its taking 2 hours plus due to the GTM timing
@@ -185,7 +188,6 @@ def get_team_work_percent(request):
 
     team_work_hours_sum = datetime.fromtimestamp(Checking.objects.all().aggregate(hours_sum=Sum(F('checkout') - F('checkin')))['hours_sum']).hour - 2
     # The -2 is because its taking 2 hours plus due to the GTM timing
-    total_hours = datetime.fromtimestamp(
-        Checking.objects.all().latest('checkout').checkout - Checking.objects.all().earliest('checkin').checkout).day * 8
+    total_hours = datetime.fromtimestamp((Checking.objects.all().aggregate(total_hours=Max('checkout') - Min('checkin')))['total_hours']).day * 8
     team_work_percent = team_work_hours_sum / total_hours * 100
     return Response({'result': '{}%'.format(team_work_percent)}, status=status.HTTP_200_OK)
