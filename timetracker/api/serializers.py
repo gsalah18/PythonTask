@@ -13,22 +13,24 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'name'
         ]
 
+
 class CheckingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Checking
         fields = [
             'id',
-            'userid',
-            'check',
-            'time'
+            'employee',
+            'checkin',
+            'checkout'
         ]
+
 
 class VacationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vacation
         fields = [
             'id',
-            'userid',
+            'employee',
             'description',
             'date'
         ]

@@ -15,7 +15,6 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-    set = {}
 
 
 if __name__ == '__main__':

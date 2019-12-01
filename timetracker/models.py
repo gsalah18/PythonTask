@@ -1,31 +1,27 @@
 from django.db import models
-from django.utils import timezone
 
 
 # Create your models here.
 
 class Employee(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=False)
 
     def __str__(self):
         return self.name
 
+
 class Checking(models.Model):
-    checkChoices = [
-        ('in', 'Check-in'),
-        ('out', 'Check-out')
-    ]
-    userid = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    check = models.CharField(max_length=3, choices=checkChoices)
-    time = models.DateTimeField(default=timezone.now)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    checkin = models.FloatField(blank=False)
+    checkout = models.FloatField(blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.userid, self.check, self.time
+        return self.employee.name
 
 class Vacation(models.Model):
-    userid = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    description = models.TextField(default='')
-    date = models.DateField(default=timezone.now)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=False)
+    description = models.TextField(default='', blank=True)
+    date = models.DateField(blank=False)
 
     def __str__(self):
-        return self.userid, self.description, self.date
+        return self.employee.name, self.description
